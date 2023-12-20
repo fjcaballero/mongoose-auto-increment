@@ -76,7 +76,7 @@ exports.plugin = function (schema, options) {
 	IdentityCounter.findOne({
 		model: settings.model,
 		field: settings.field,
-	}).then((counter) => {
+	}).then(async (counter) => {
 		if (!counter) {
 			// If no counter exists then create one and save it.
 			counter = new IdentityCounter({
@@ -84,9 +84,8 @@ exports.plugin = function (schema, options) {
 				field: settings.field,
 				count: settings.startAt - settings.incrementBy,
 			});
-			counter.save(function () {
-				ready = true;
-			});
+			await counter.save();
+			ready = true;
 		} else {
 			ready = true;
 		}
